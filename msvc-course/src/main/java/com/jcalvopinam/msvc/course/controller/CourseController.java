@@ -27,8 +27,10 @@ package com.jcalvopinam.msvc.course.controller;
 
 import com.jcalvopinam.msvc.course.domain.Course;
 import com.jcalvopinam.msvc.course.service.CourseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,15 +68,16 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<Course> save(@RequestBody final Course course) {
+    public ResponseEntity<Course> save(@Valid @RequestBody final Course course, final BindingResult result) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(courseService.save(course));
+                             .body(courseService.save(course, result));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Course> update(@PathVariable final Long id, @RequestBody final Course course) {
+    public ResponseEntity<Course> update(@Valid @RequestBody final Course course, final BindingResult result,
+                                         @PathVariable final Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(courseService.update(id, course));
+                             .body(courseService.update(course, result, id));
     }
 
     @DeleteMapping(value = "/{id}")

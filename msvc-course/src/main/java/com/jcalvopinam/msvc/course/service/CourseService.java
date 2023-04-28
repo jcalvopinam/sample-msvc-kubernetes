@@ -26,6 +26,7 @@
 package com.jcalvopinam.msvc.course.service;
 
 import com.jcalvopinam.msvc.course.domain.Course;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -38,9 +39,9 @@ public interface CourseService {
 
     Course getCourseById(Long id);
 
-    Course save(Course course);
+    Course save(Course course, BindingResult result);
 
-    Course update(Long id, Course course);
+    Course update(Course course, BindingResult result, Long id);
 
     void delete(Long id);
 

@@ -26,11 +26,17 @@
 package com.jcalvopinam.msvc.course.service;
 
 import com.jcalvopinam.msvc.course.domain.Course;
+import com.jcalvopinam.msvc.course.exception.BadRequestException;
+import com.jcalvopinam.msvc.course.exception.NotFoundException;
 import com.jcalvopinam.msvc.course.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
@@ -58,13 +64,15 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Course save(final Course course) {
+    public Course save(final Course course, final BindingResult result) {
+        validateRequest(result);
         return courseRepository.save(course);
     }
 
     @Override
     @Transactional
-    public Course update(final Long id, final Course course) {
+    public Course update(final Course course, final BindingResult result, final Long id) {
+        validateRequest(result);
         final Course currentCourse = findById(id);
         currentCourse.setName(course.getName());
         return courseRepository.save(currentCourse);
@@ -79,7 +87,20 @@ public class CourseServiceImpl implements CourseService {
 
     private Course findById(final Long id) {
         return courseRepository.findById(id)
-                               .orElseThrow(() -> new RuntimeException("Course not found"));
+                               .orElseThrow(() -> new NotFoundException("Course not found"));
+    }
+
+    private void validateRequest(final BindingResult result) {
+        final Map<String, String> errors = new HashMap<>();
+        final List<FieldError> fieldErrors = result.getFieldErrors();
+
+        if (!fieldErrors.isEmpty()) {
+            fieldErrors.forEach(error -> {
+                final String message = "The field " + error.getField() + " " + error.getDefaultMessage();
+                errors.put(error.getField(), message);
+            });
+            throw new BadRequestException("Please check the following issues", errors);
+        }
     }
 
 }
