@@ -27,8 +27,10 @@ package com.jcalvopinam.msvc.user.controller;
 
 import com.jcalvopinam.msvc.user.domain.User;
 import com.jcalvopinam.msvc.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,15 +69,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody final User user) {
+    public ResponseEntity<User> save(@Valid @RequestBody final User user, final BindingResult result) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(userService.save(user));
+                             .body(userService.save(user, result));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable final Long id, @RequestBody final User user) {
+    public ResponseEntity<User> update(@Valid @RequestBody final User user, final BindingResult result,
+                                       @PathVariable final Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(userService.update(id, user));
+                             .body(userService.update(user, result, id));
     }
 
     @DeleteMapping("/{id}")

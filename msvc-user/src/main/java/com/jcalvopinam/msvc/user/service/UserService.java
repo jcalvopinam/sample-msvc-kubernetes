@@ -26,6 +26,7 @@
 package com.jcalvopinam.msvc.user.service;
 
 import com.jcalvopinam.msvc.user.domain.User;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -39,10 +40,12 @@ public interface UserService {
 
     User getUserById(Long id);
 
-    User save(User user);
+    User save(User user, final BindingResult result);
 
-    User update(Long id, User user);
+    User update(User user, final BindingResult result, Long id);
 
     void delete(Long id);
+
+    boolean existEmail(String email);
 
 }
