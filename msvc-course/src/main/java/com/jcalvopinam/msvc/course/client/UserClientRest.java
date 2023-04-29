@@ -23,21 +23,25 @@
  *
  */
 
-package com.jcalvopinam.msvc.course;
+package com.jcalvopinam.msvc.course.client;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import com.jcalvopinam.msvc.course.dto.UserDTO;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
-@EnableFeignClients
-@SpringBootApplication
-public class MsvcCourseApplication {
+@FeignClient(name = "msvc-user", url = "http://localhost:8001")
+public interface UserClientRest {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MsvcCourseApplication.class, args);
-    }
+    @GetMapping(value = "/{id}")
+    UserDTO findUserById(@PathVariable Long id);
+
+    @PostMapping("/")
+    UserDTO createUser(@RequestBody UserDTO userDTO);
 
 }
