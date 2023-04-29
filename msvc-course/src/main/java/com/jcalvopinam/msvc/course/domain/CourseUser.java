@@ -25,61 +25,49 @@
 
 package com.jcalvopinam.msvc.course.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jcalvopinam.msvc.course.dto.UserDTO;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
+
 @Entity
-@Table(name = "COURSE")
+@Table(name = "COURSE_USER")
 @Getter
 @Setter
-public class Course {
+public class CourseUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
-    @Column(name = "name")
-    private String name;
+    @Column(name = "USER_ID", unique = true)
+    private Long userId;
 
-    @Transient
-    @JsonProperty(value = "users")
-    private List<UserDTO> userDTOList;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "course_id")
-    private List<CourseUser> courseUsers;
-
-    public Course() {
-        this.courseUsers = new ArrayList<>();
-        this.userDTOList = new ArrayList<>();
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final CourseUser courseUser = (CourseUser) obj;
+        return Objects.equals(userId, courseUser.userId);
     }
 
-    public void addCourseUser(final CourseUser courseUser) {
-        courseUsers.add(courseUser);
-    }
-
-    public void removeCourseUser(final CourseUser courseUser) {
-        courseUsers.remove(courseUser);
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 
 }
