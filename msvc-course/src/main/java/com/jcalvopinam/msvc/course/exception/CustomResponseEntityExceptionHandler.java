@@ -57,9 +57,9 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponseDTO> handleAllExceptions(final Exception exception) {
         final ExceptionResponseDTO exceptionResponseDTO =
-                this.getExceptionResponseDTO(exception.getMessage(),
-                                             Exception.class.getSimpleName(),
-                                             HttpStatus.INTERNAL_SERVER_ERROR.value());
+                getExceptionResponseDTO(exception.getMessage(),
+                                        Exception.class.getSimpleName(),
+                                        HttpStatus.INTERNAL_SERVER_ERROR.value());
         return new ResponseEntity<>(exceptionResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -69,9 +69,9 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler(NotFoundException.class)
     public final ResponseEntity<ExceptionResponseDTO> handleNotFoundException(final Exception exception) {
         final ExceptionResponseDTO exceptionResponseDTO =
-                this.getExceptionResponseDTO(exception.getMessage(),
-                                             NotFoundException.class.getSimpleName(),
-                                             HttpStatus.NOT_FOUND.value());
+                getExceptionResponseDTO(exception.getMessage(),
+                                        NotFoundException.class.getSimpleName(),
+                                        HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(exceptionResponseDTO, HttpStatus.NOT_FOUND);
     }
 
@@ -81,9 +81,9 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler(AlreadyExistsException.class)
     public final ResponseEntity<ExceptionResponseDTO> handleAlreadyExistsException(final Exception exception) {
         final ExceptionResponseDTO exceptionResponseDTO =
-                this.getExceptionResponseDTO(exception.getMessage(),
-                                             AlreadyExistsException.class.getSimpleName(),
-                                             HttpStatus.CONFLICT.value());
+                getExceptionResponseDTO(exception.getMessage(),
+                                        AlreadyExistsException.class.getSimpleName(),
+                                        HttpStatus.CONFLICT.value());
         return new ResponseEntity<>(exceptionResponseDTO, HttpStatus.CONFLICT);
     }
 
@@ -99,6 +99,18 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
                                      .code(HttpStatus.BAD_REQUEST.value())
                                      .build();
         return new ResponseEntity<>(exceptionResponseDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @ExceptionHandler(ClientException.class)
+    public final ResponseEntity<ExceptionResponseDTO> handleClientException(final Exception exception) {
+        final ExceptionResponseDTO exceptionResponseDTO =
+                getExceptionResponseDTO(exception.getMessage(),
+                                        AlreadyExistsException.class.getSimpleName(),
+                                        HttpStatus.SERVICE_UNAVAILABLE.value());
+        return new ResponseEntity<>(exceptionResponseDTO, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
 }
