@@ -31,6 +31,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
@@ -41,7 +44,10 @@ public interface UserClientRest {
     @GetMapping(value = "/{id}")
     UserDTO findUserById(@PathVariable Long id);
 
-    @PostMapping("/")
+    @PostMapping(value = "/")
     UserDTO createUser(@RequestBody UserDTO userDTO);
+
+    @GetMapping(value = "/ids")
+    List<UserDTO> findAllUsersById(@RequestParam List<Long> ids);
 
 }

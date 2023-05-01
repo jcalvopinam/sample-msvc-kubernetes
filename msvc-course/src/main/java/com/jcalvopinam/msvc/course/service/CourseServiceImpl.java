@@ -25,7 +25,10 @@
 
 package com.jcalvopinam.msvc.course.service;
 
+import com.jcalvopinam.msvc.course.client.UserClientRest;
 import com.jcalvopinam.msvc.course.domain.Course;
+import com.jcalvopinam.msvc.course.domain.CourseUser;
+import com.jcalvopinam.msvc.course.dto.UserDTO;
 import com.jcalvopinam.msvc.course.exception.BadRequestException;
 import com.jcalvopinam.msvc.course.exception.NotFoundException;
 import com.jcalvopinam.msvc.course.repository.CourseRepository;
@@ -44,16 +47,36 @@ import java.util.Map;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    private CourseRepository courseRepository;
+    public static final String COURSE_NOT_FOUND = "Course not found";
+    private final CourseRepository courseRepository;
+    private final UserClientRest client;
 
-    public CourseServiceImpl(final CourseRepository courseRepository) {
+    public CourseServiceImpl(final CourseRepository courseRepository, final UserClientRest client) {
         this.courseRepository = courseRepository;
+        this.client = client;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Course> getCourses() {
         return (List<Course>) courseRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Course getCoursesWithUsers(final Long id) {
+        final Course course = findById(id);
+        if (course.getCourseUsers()
+                  .isEmpty()) {
+            throw new NotFoundException(COURSE_NOT_FOUND);
+        }
+        List<Long> userIds = course.getCourseUsers()
+                                   .stream()
+                                   .map(CourseUser::getUserId)
+                                   .toList();
+        final List<UserDTO> userDTOList = client.findAllUsersById(userIds);
+        course.setUserDTOList(userDTOList);
+        return course;
     }
 
     @Override
@@ -87,7 +110,7 @@ public class CourseServiceImpl implements CourseService {
 
     private Course findById(final Long id) {
         return courseRepository.findById(id)
-                               .orElseThrow(() -> new NotFoundException("Course not found"));
+                               .orElseThrow(() -> new NotFoundException(COURSE_NOT_FOUND));
     }
 
     private void validateRequest(final BindingResult result) {

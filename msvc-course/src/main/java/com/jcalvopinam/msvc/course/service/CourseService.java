@@ -37,6 +37,8 @@ public interface CourseService {
 
     List<Course> getCourses();
 
+    Course getCoursesWithUsers(Long id);
+
     Course getCourseById(Long id);
 
     Course save(Course course, BindingResult result);

@@ -64,7 +64,7 @@ public class CourseController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Course> findById(@PathVariable final Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(courseService.getCourseById(id));
+                             .body(courseService.getCoursesWithUsers(id));
     }
 
     @PostMapping
