@@ -25,20 +25,17 @@
 
 package com.jcalvopinam.msvc.user;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
+@FeignClient(name = "msvc-course", url = "localhost:8002")
+public interface CourseClientRest {
 
-@EnableFeignClients
-@SpringBootApplication
-public class MsvcUserApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(MsvcUserApplication.class, args);
-    }
+    @DeleteMapping(value = "/assignments/users/{userId}")
+    void unassignCourseUserById(final @PathVariable Long userId);
 
 }

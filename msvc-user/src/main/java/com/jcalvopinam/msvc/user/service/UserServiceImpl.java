@@ -25,6 +25,7 @@
 
 package com.jcalvopinam.msvc.user.service;
 
+import com.jcalvopinam.msvc.user.CourseClientRest;
 import com.jcalvopinam.msvc.user.domain.User;
 import com.jcalvopinam.msvc.user.exception.AlreadyExistsException;
 import com.jcalvopinam.msvc.user.exception.BadRequestException;
@@ -47,9 +48,11 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CourseClientRest client;
 
-    public UserServiceImpl(final UserRepository userRepository) {
+    public UserServiceImpl(final UserRepository userRepository, final CourseClientRest client) {
         this.userRepository = userRepository;
+        this.client = client;
     }
 
     @Override
@@ -104,6 +107,7 @@ public class UserServiceImpl implements UserService {
     public void delete(final Long id) {
         final User currentUser = findById(id);
         userRepository.delete(currentUser);
+        client.unassignCourseUserById(id);
     }
 
     @Override
