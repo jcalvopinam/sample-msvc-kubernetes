@@ -40,6 +40,8 @@ public interface UserService {
 
     User getUserById(Long id);
 
+    List<User> getUsersByIds(List<Long> ids);
+
     User save(User user, final BindingResult result);
 
     User update(User user, final BindingResult result, Long id);

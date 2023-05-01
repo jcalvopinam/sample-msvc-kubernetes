@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -66,6 +67,12 @@ public class UserController {
     public ResponseEntity<User> findById(@PathVariable final Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                              .body(userService.getUserById(id));
+    }
+
+    @GetMapping(value = "/ids")
+    public ResponseEntity<List<User>> findByIds(@RequestParam final List<Long> ids) {
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(userService.getUsersByIds(ids));
     }
 
     @PostMapping
