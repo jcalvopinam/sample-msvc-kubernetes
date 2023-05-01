@@ -28,8 +28,6 @@ package com.jcalvopinam.msvc.user.repository;
 import com.jcalvopinam.msvc.user.domain.User;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
-
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
