@@ -54,7 +54,7 @@ public class CourseUserController {
     @PutMapping(value = "/{courseId}")
     public ResponseEntity<UserDTO> assignCourseUser(final @RequestBody UserDTO userDTO, final BindingResult result,
                                                     @PathVariable Long courseId) {
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                              .body(courseUserService.assignUserToCourse(userDTO, result, courseId));
     }
 
@@ -70,6 +70,13 @@ public class CourseUserController {
                                                         @PathVariable Long courseId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                              .body(courseUserService.deleteUserFromCourse(userDTO, result, courseId));
+    }
+
+    @DeleteMapping(value = "/users/{userId}")
+    public ResponseEntity<Void> unassignCourseUserById(final @PathVariable Long userId) {
+        courseUserService.unassignCourseUserById(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                             .build();
     }
 
 }

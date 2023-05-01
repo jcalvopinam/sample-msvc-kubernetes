@@ -30,9 +30,10 @@ import com.jcalvopinam.msvc.course.domain.Course;
 import com.jcalvopinam.msvc.course.domain.CourseUser;
 import com.jcalvopinam.msvc.course.dto.UserDTO;
 import com.jcalvopinam.msvc.course.exception.ClientException;
+import com.jcalvopinam.msvc.course.repository.CourseRepository;
 import feign.FeignException;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 /**
@@ -41,12 +42,16 @@ import org.springframework.validation.BindingResult;
 @Service
 public class CourseUserServiceImpl implements CourseUserService {
 
-    private CourseService courseService;
-    private UserClientRest client;
+    private final CourseService courseService;
+    private final UserClientRest client;
 
-    public CourseUserServiceImpl(final UserClientRest client, final CourseService courseService) {
+    private final CourseRepository courseRepository;
+
+    public CourseUserServiceImpl(final UserClientRest client, final CourseService courseService,
+                                 final CourseRepository courseRepository) {
         this.client = client;
         this.courseService = courseService;
+        this.courseRepository = courseRepository;
     }
 
     @Override
@@ -98,6 +103,12 @@ public class CourseUserServiceImpl implements CourseUserService {
             throw new ClientException(exception.getMessage());
         }
         return clientUser;
+    }
+
+    @Override
+    @Transactional
+    public void unassignCourseUserById(final Long userId) {
+        courseRepository.unassignCourseUserById(userId);
     }
 
 }

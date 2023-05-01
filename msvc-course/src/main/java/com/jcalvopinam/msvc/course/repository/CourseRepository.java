@@ -26,11 +26,17 @@
 package com.jcalvopinam.msvc.course.repository;
 
 import com.jcalvopinam.msvc.course.domain.Course;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
 public interface CourseRepository extends CrudRepository<Course, Long> {
+
+    @Modifying
+    @Query("DELETE FROM CourseUser CU WHERE CU.userId = ?1")
+    void unassignCourseUserById(Long userId);
 
 }

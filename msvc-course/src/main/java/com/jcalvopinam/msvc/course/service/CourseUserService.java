@@ -39,4 +39,6 @@ public interface CourseUserService {
 
     UserDTO deleteUserFromCourse(UserDTO user, BindingResult result, Long courseId);
 
+    void unassignCourseUserById(Long userId);
+
 }
