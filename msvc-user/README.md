@@ -11,9 +11,9 @@
 docker run --name mysqldb -e MYSQL_ROOT_PASSWORD=juanca -p 3306:3306 -d mysql:8
 ```
 
-- To build msvc-user image:
+- To build msvc-user image go to the sample-msvc-kubernetes folder:
 ```shell
-docker build -t msvc-user:1.0.0 .
+docker build -t msvc-user:1.0.0 . -f ./msvc-user/Dockerfile
 ```
 
 - To run an instance of the image:
