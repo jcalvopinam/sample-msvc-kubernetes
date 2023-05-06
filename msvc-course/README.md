@@ -11,12 +11,12 @@
 docker run --name postgresdb -e POSTGRES_PASSWORD=juanca -p 5432:5432 -d postgres:15.2
 ```
 
-- To build msvc-user image:
+- To build msvc-course image go to the sample-msvc-kubernetes folder:
 ```shell
-docker build -t msvc-course:1.0.0 .
+docker build -t msvc-course:1.0.0 . -f ./msvc-course/Dockerfile
 ```
 
 - To run an instance of the image:
 ```shell
-docker run -p 8002:8002 msvc-course:1.0.0 
+docker run -p 8002:8002 msvc-course:1.0.0
 ```
