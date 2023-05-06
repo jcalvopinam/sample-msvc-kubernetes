@@ -23,7 +23,7 @@
  *
  */
 
-package com.jcalvopinam.msvc.user;
+package com.jcalvopinam.msvc.user.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
-@FeignClient(name = "msvc-course", url = "localhost:8002")
+@FeignClient(name = "msvc-course", url = "host.docker.internal:8002")
 public interface CourseClientRest {
 
     @DeleteMapping(value = "/assignments/users/{userId}")

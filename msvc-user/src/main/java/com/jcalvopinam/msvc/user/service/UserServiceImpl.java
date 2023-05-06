@@ -25,7 +25,7 @@
 
 package com.jcalvopinam.msvc.user.service;
 
-import com.jcalvopinam.msvc.user.CourseClientRest;
+import com.jcalvopinam.msvc.user.client.CourseClientRest;
 import com.jcalvopinam.msvc.user.domain.User;
 import com.jcalvopinam.msvc.user.exception.AlreadyExistsException;
 import com.jcalvopinam.msvc.user.exception.BadRequestException;
