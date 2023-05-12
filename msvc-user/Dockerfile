@@ -18,6 +18,7 @@ RUN ./mvnw clean package -Dmaven.test.skip
 FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
+RUN mkdir ./logs
 
 COPY --from=builder /app/msvc-user/target/msvc-user-1.0.0-SNAPSHOT.jar .
 
