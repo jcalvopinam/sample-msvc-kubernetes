@@ -8,8 +8,8 @@ COPY ./msvc-course/mvnw .
 COPY ./msvc-course/pom.xml .
 
 # either of the following 2 definitions can be used and the other one must be commented upon
-RUN ./mvnw clean package -Dmaven.test.skip -Dmaven.main.skip -Dspring-boot.repackage.skip && rm -r ./target/
-# RUN ./mvnw dependency:go-offline
+#RUN ./mvnw clean package -Dmaven.test.skip -Dmaven.main.skip -Dspring-boot.repackage.skip && rm -r ./target/
+RUN ./mvnw dependency:go-offline
 
 COPY ./msvc-course/src ./src
 
@@ -18,6 +18,7 @@ RUN ./mvnw clean package -Dmaven.test.skip
 FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
+RUN mkdir ./logs
 
 COPY --from=builder /app/msvc-course/target/msvc-course-1.0.0-SNAPSHOT.jar .
 
