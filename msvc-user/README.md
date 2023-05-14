@@ -44,5 +44,9 @@ docker run -p 8001:8090 -e APP_PORT=8090 -d --rm --name microservice-user --netw
 ```
 - To read the environments from a file is necessary to create a file called `.env` and add the variables, after run:
 ```shell
-docker run -p 8001:8091 --env-file=./msvc-user/.env -d --rm --name microservice-user --network spring msvc-user:1.0.0
+docker run -p 8001:8001 --env-file=./msvc-user/.env -d --rm --name microservice-user --network spring msvc-user:1.0.0
+```
+- To inspect the environment variables
+```shell
+docker inspect microservice-course | grep -A 10 'Env'  
 ```
