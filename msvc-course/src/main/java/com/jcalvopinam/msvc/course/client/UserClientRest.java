@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
-@FeignClient(name = "msvc-user", url = "http://host.docker.internal:8001")
+@FeignClient(name = "msvc-user", url = "host.docker.internal:8001")
 public interface UserClientRest {
 
     @GetMapping(value = "/{id}")
