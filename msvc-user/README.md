@@ -27,7 +27,7 @@ sdk use java 17.0.6-librca
 - The `url` property must be the same name of the running docker instance for the microservice
 
 In this case for this project:
-- The user microservices has defined the name `msvc-course`
+- The course microservice has defined the name `msvc-course`
 - The instance was created with the name `microservice-course`
 - And the port number is `8002`
 ```java

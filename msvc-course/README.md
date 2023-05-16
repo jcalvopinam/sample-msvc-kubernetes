@@ -18,7 +18,29 @@ sdk use java 17.0.6-librca
 ./mvnw clean install -Dmaven.test.skip
 ```
 
-## Docker database
+## FeignClient configuration
+- The feign annotation has the following structure of the target microservice
+```java
+@FeignClient(name = "name-of-the-microservice", url = "name-of-the-microservice-docker-instance")
+```
+- The `name` property must be the same name defined in the `application.properties` file under the key `spring.application.name`
+- The `url` property must be the same name of the running docker instance for the microservice
+
+In this case for this project:
+- The user microservices has defined the name `msvc-user`
+- The instance was created with the name `microservice-user`
+- And the port number is `8001`
+```java
+@FeignClient(name = "msvc-user", url = "microservice-user:8001")
+```
+- Those values can be externalized in the `application.properties` file and also in the `.env` file
+```java
+@FeignClient(name = "${msvc.user.application.name}", url = "${msvc.user.application.url}")
+```
+
+## Docker
+
+### Docker database
 ```shell
 docker run --name postgresdb -e POSTGRES_PASSWORD=juanca -p 5432:5432 -d postgres:15.2
 ```
@@ -26,10 +48,14 @@ docker run --name postgresdb -e POSTGRES_PASSWORD=juanca -p 5432:5432 -d postgre
 ```shell
 docker start postgresdb
 ```
+
+### Docker Network
 - To create a new Docker network
 ```shell
 docker network create spring
 ```
+
+### Docker Course
 - To build msvc-course image go to the sample-msvc-kubernetes folder:
 ```shell
 docker build -t msvc-course:1.0.0 . -f ./msvc-course/Dockerfile
@@ -38,7 +64,7 @@ docker build -t msvc-course:1.0.0 . -f ./msvc-course/Dockerfile
 ```shell
 docker run -p 8002:8080 -d --rm --name microservice-course --network spring msvc-course:1.0.0
 ```
-- To overwrite the internal port
+- Sample to overwrite the internal port
 ```shell
 docker run -p 8002:8092 -e APP_PORT=8092 -d --rm --name microservice-course --network spring msvc-course:1.0.0
 ```
@@ -48,5 +74,5 @@ docker run -p 8002:8002 --env-file=./msvc-course/.env -d --rm --name microservic
 ```
 - To inspect the environment variables
 ```shell
-docker inspect microservice-course | grep -A 10 'Env'  
+docker inspect microservice-course | grep -A 12 'Env'  
 ```
