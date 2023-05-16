@@ -1,9 +1,10 @@
 # Getting Started
 
 ## Properties file
-- To run Dockerfile, it is necessary to update the reference of localhost in the `application.properties` file
+- To run the `Dockerfile` is necessary to update the reference of localhost in the `application.properties` file
+- Search for the key `spring.datasource.url`
 - Replace `localhost` by `host.docker.internal`
-- And also the reference in the `src/main/java/com/jcalvopinam/msvc/user/client/CourseClientRest.java` class
+- And also the `url` property of the Feign client `src/main/java/com/jcalvopinam/msvc/user/client/CourseClientRest.java`
 - Compile again: `./mvnw package -Dmaven.test.skip `
 
 ## Set-up Java 17
@@ -42,7 +43,12 @@ In this case for this project:
 
 ### Docker database
 ```shell
-docker run --name mysqldb -e MYSQL_ROOT_PASSWORD=juanca -p 3306:3306 -d mysql:8
+docker run -p 3306:3306 -d \
+  -e MYSQL_ROOT_PASSWORD=juanca \
+  -v data-mysql:/var/lib/mysql \
+  --restart always \
+  --name mysqldb \
+  mysql:8
 ```
 - To start the database
 ```shell
@@ -62,15 +68,26 @@ docker build -t msvc-user:1.0.0 . -f ./msvc-user/Dockerfile
 ```
 - To run an instance of the image:
 ```shell
-docker run -p 8001:8080 -d --rm --name microservice-user --network spring msvc-user:1.0.0
+docker run -p 8001:8080 -d --rm \
+  --network spring \
+  --name microservice-user \
+  msvc-user:1.0.0
 ```
 - Sample to overwrite the internal port
 ```shell
-docker run -p 8001:8090 -e APP_PORT=8090 -d --rm --name microservice-user --network spring msvc-user:1.0.0
+docker run -p 8001:8091 -d --rm \
+  -e APP_PORT=8091 \
+  --network spring \
+  --name microservice-user \
+  msvc-user:1.0.0
 ```
 - To read the environments from a file is necessary to create a file called `.env` and add the variables, after run:
 ```shell
-docker run -p 8001:8001 --env-file=./msvc-user/.env -d --rm --name microservice-user --network spring msvc-user:1.0.0
+docker run -p 8001:8001 -d --rm \
+  --env-file=./msvc-user/.env \
+  --network spring \
+  --name microservice-user \
+  msvc-user:1.0.0
 ```
 - To inspect the environment variables
 ```shell
