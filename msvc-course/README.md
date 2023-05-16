@@ -1,9 +1,10 @@
 # Getting Started
 
 ## Properties file
-- To run Dockerfile, it is necessary to update the reference of localhost in the `application.properties` file
+- To run the `Dockerfile` is necessary to update the reference of localhost in the `application.properties` file
+- Search for the key `spring.datasource.url`
 - Replace `localhost` by `host.docker.internal`
-- And also the reference in the `src/main/java/com/jcalvopinam/msvc/course/client/UserClientRest.java` class
+- And also the `url` property of Feign client `src/main/java/com/jcalvopinam/msvc/course/client/UserClientRest.java`
 - Compile again: `./mvnw package -Dmaven.test.skip `
 
 ## Set-up Java 17
@@ -27,7 +28,7 @@ sdk use java 17.0.6-librca
 - The `url` property must be the same name of the running docker instance for the microservice
 
 In this case for this project:
-- The user microservices has defined the name `msvc-user`
+- The user microservice has defined the name `msvc-user`
 - The instance was created with the name `microservice-user`
 - And the port number is `8001`
 ```java
@@ -42,7 +43,12 @@ In this case for this project:
 
 ### Docker database
 ```shell
-docker run --name postgresdb -e POSTGRES_PASSWORD=juanca -p 5432:5432 -d postgres:15.2
+docker run -p 5432:5432 -d \
+  -e POSTGRES_PASSWORD=juanca \
+  -v data-postgres:/var/lib/postgresql/data \
+  --restart always \
+  --name postgresdb \
+  postgres:15.2-alpine
 ```
 - To start the database
 ```shell
@@ -62,15 +68,26 @@ docker build -t msvc-course:1.0.0 . -f ./msvc-course/Dockerfile
 ```
 - To run an instance of the image:
 ```shell
-docker run -p 8002:8080 -d --rm --name microservice-course --network spring msvc-course:1.0.0
+docker run -p 8002:8080 -d --rm \
+  --network spring \
+  --name microservice-course \
+  msvc-course:1.0.0
 ```
 - Sample to overwrite the internal port
 ```shell
-docker run -p 8002:8092 -e APP_PORT=8092 -d --rm --name microservice-course --network spring msvc-course:1.0.0
+docker run -p 8002:8092 -d --rm \
+  -e APP_PORT=8092 \
+  --network spring \
+  --name microservice-course \
+  msvc-course:1.0.0
 ```
 - To read the environments from a file is necessary to create a file called `.env` and add the variables, after run:
 ```shell
-docker run -p 8002:8002 --env-file=./msvc-course/.env -d --rm --name microservice-course --network spring msvc-course:1.0.0
+docker run -p 8002:8002 -d --rm \
+  --env-file=./msvc-course/.env \
+  --network spring \
+  --name microservice-course \
+  msvc-course:1.0.0
 ```
 - To inspect the environment variables
 ```shell
