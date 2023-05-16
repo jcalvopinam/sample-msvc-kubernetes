@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
-@FeignClient(name = "msvc-course", url = "host.docker.internal:8002")
+@FeignClient(name = "${msvc.course.application.name}", url = "${msvc.course.application.url}")
 public interface CourseClientRest {
 
     @DeleteMapping(value = "/assignments/users/{userId}")
