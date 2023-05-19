@@ -1,11 +1,20 @@
 # Getting Started
+All the commands must be run under the sample-msvc-kubernetes folder
 
 ## Docker compose
-- To create and start the services go to the sample-msvc-kubernetes folder:
+- To create and start the services:
 ```shell
 docker-compose up -d
 ```
-- To start the services go to the sample-msvc-kubernetes folder:
+- To force to build the images:
+```shell
+docker-compose build
+```
+- To force to build, create and start the services:
+```shell
+docker-compose up --build -d
+```
+- To start the services:
 ```shell
 docker-compose start
 ```
