@@ -30,6 +30,9 @@ services:
 
   microservice-user:
     container_name: msvc-user-cont
+    build:
+      context: ./
+      dockerfile: ./msvc-user/Dockerfile
     image: sample-msvc-kubernetes/msvc-user:1.0.0
     ports:
       - "8001:8001"
@@ -43,6 +46,9 @@ services:
 
   microservice-course:
     container_name: msvc-course-cont
+    build:
+      context: ./
+      dockerfile: ./msvc-course/Dockerfile
     image: sample-msvc-kubernetes/msvc-course:1.0.0
     ports:
       - "8002:8002"
@@ -52,6 +58,7 @@ services:
       - microservice_network
     depends_on:
       - db-postgres
+      - microservice-user
     restart: always
 
 networks:
