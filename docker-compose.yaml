@@ -1,0 +1,65 @@
+version: "3.9"
+services:
+  db-mysql:
+    container_name: mysqldb
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: juanca
+      MYSQL_DATABASE: msvc_user_db
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    restart: always
+    networks:
+      - microservice_network
+
+  db-postgres:
+    container_name: postgresdb
+    image: postgres:15.2-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: juanca
+      POSTGRES_DB: msvc_course_db
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - microservice_network
+
+  microservice-user:
+    container_name: msvc-user-cont
+    image: sample-msvc-kubernetes/msvc-user:1.0.0
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./msvc-user/.env
+    networks:
+      - microservice_network
+    depends_on:
+      - db-mysql
+    restart: always
+
+  microservice-course:
+    container_name: msvc-course-cont
+    image: sample-msvc-kubernetes/msvc-course:1.0.0
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./msvc-course/.env
+    networks:
+      - microservice_network
+    depends_on:
+      - db-postgres
+    restart: always
+
+networks:
+  microservice_network:
+    name: sample_msvc_kubernetes_net
+
+volumes:
+  mysql-volume:
+    name: data-mysql
+  postgres-volume:
+    name: data-postgres
