@@ -28,11 +28,11 @@ sdk use java 17.0.6-librca
 - The `url` property must be the same name of the running docker instance for the microservice
 
 In this case for this project:
-- The course microservice has defined the name `msvc-course`
-- The instance was created with the name `microservice-course`
+- The course microservice has defined the name `msvc-course-web`
+- The instance was created with the name `msvc-course-cont`
 - And the port number is `8002`
 ```java
-@FeignClient(name = "msvc-course", url = "microservice-course:8002")
+@FeignClient(name = "msvc-course-web", url = "msvc-course-cont:8002")
 ```
 - Those values can be externalized in the `application.properties` file and also in the `.env` file
 ```java
@@ -45,6 +45,7 @@ In this case for this project:
 ```shell
 docker run -p 3306:3306 -d \
   -e MYSQL_ROOT_PASSWORD=juanca \
+  -e MYSQL_DATABASE=msvc_user_db \
   -v data-mysql:/var/lib/mysql \
   --restart always \
   --name mysqldb \
@@ -54,40 +55,44 @@ docker run -p 3306:3306 -d \
 ```shell
 docker start mysqldb
 ```
+- To stop the database
+```shell
+docker stop mysqldb
+```
 
 ### Docker Network
-- To create a new Docker network
+- To create a new Docker network (if not already created)
 ```shell
-docker network create spring
+docker network create sample_msvc_kubernetes_net
 ```
 
 ### Docker User
 - To build msvc-user image go to the sample-msvc-kubernetes folder:
 ```shell
-docker build -t msvc-user:1.0.0 . -f ./msvc-user/Dockerfile
+docker build -t sample-msvc-kubernetes/msvc-user:1.0.0 . -f ./msvc-user/Dockerfile
 ```
 - To run an instance of the image:
 ```shell
 docker run -p 8001:8080 -d --rm \
-  --network spring \
-  --name microservice-user \
-  msvc-user:1.0.0
+  --name msvc-user-cont \
+  --network sample_msvc_kubernetes_net \
+  sample-msvc-kubernetes/msvc-user:1.0.0
 ```
 - Sample to overwrite the internal port
 ```shell
 docker run -p 8001:8091 -d --rm \
+  --name msvc-user-cont \
   -e APP_PORT=8091 \
-  --network spring \
-  --name microservice-user \
-  msvc-user:1.0.0
+  --network sample_msvc_kubernetes_net \
+  sample-msvc-kubernetes/msvc-user:1.0.0
 ```
 - To read the environments from a file is necessary to create a file called `.env` and add the variables, after run:
 ```shell
 docker run -p 8001:8001 -d --rm \
+  --name msvc-user-cont \
   --env-file=./msvc-user/.env \
-  --network spring \
-  --name microservice-user \
-  msvc-user:1.0.0
+  --network sample_msvc_kubernetes_net \
+  sample-msvc-kubernetes/msvc-user:1.0.0
 ```
 - To inspect the environment variables
 ```shell
