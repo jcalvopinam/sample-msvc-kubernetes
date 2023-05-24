@@ -26,6 +26,7 @@
 package com.jcalvopinam.msvc.course.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
@@ -33,9 +34,10 @@ import java.util.Map;
  * @author jcalvopinam <juan.calvopina@gmail.com>
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BadRequestException extends RuntimeException {
 
-    private Map<String, String> errors;
+    private final Map<String, String> errors;
 
     public BadRequestException(final String message, final Map<String, String> errors) {
         super(message);

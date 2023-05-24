@@ -49,7 +49,7 @@ import java.util.List;
 @RequestMapping(value = "/")
 public class CourseController {
 
-    private CourseService courseService;
+    private final CourseService courseService;
 
     public CourseController(CourseService courseService) {
         this.courseService = courseService;

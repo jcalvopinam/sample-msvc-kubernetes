@@ -45,7 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/assignments")
 public class CourseUserController {
 
-    private CourseUserService courseUserService;
+    private final CourseUserService courseUserService;
 
     public CourseUserController(CourseUserService courseUserService) {
         this.courseUserService = courseUserService;
